@@ -46,14 +46,12 @@ public class UserController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<Response> addNewUser(@RequestBody UserEntity userInfo){
+    public ResponseEntity<Response> addNewUser(@RequestBody RegisterDTO userInfo){
         if (userRepository.existsByEmail(userInfo.getEmail())) {
-            //return new ResponseEntity<>(new ErrorResponseDTO("Email is taken!"), HttpStatus.BAD_REQUEST);
 
             return ResponseEntity.ok(
                     Response.builder()
                             .timeStamp(LocalDateTime.now())
-                            //.data(of("user", service.registerUser(user)))
                             .message("Email is taken!")
                             .status(HttpStatus.CONFLICT)
                             .statusCode(HttpStatus.CONFLICT.value())
