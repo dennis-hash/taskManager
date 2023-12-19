@@ -1,5 +1,6 @@
 package com.example.TaskPro.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class UserEntity {
     private String mName;
     private String lName;
     private String email;
+    @JsonIgnore
     private String password;
 
 
@@ -27,6 +29,7 @@ public class UserEntity {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
+    @JsonIgnore
     private List<Roles> roles = new ArrayList<>();
 
 }
