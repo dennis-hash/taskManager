@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.util.Map.of;
 
@@ -91,10 +93,15 @@ public class UserController {
             if (authentication.isAuthenticated()) {
                 String token = jwtService.generateToken(loginDto.getEmail());
                 //return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+                //userRepository.existsByEmail(loginDto.getEmail());
+                Map<String, Object> tokenAndUserMap = new HashMap<>();
+                tokenAndUserMap.put("token",token);
+                tokenAndUserMap.put("user",userRepository.findByEmail(loginDto.getEmail()));
+
                 return ResponseEntity.ok(
                         Response.builder()
                                 .timeStamp(LocalDateTime.now())
-                                .data(of("token", token))
+                                .data(tokenAndUserMap)
                                 .message("Logged in successfully")
                                 .status(HttpStatus.OK)
                                 .statusCode(HttpStatus.OK.value())
