@@ -14,18 +14,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.of;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -129,5 +130,26 @@ public class UserController {
                         .build()
         );
 
+    }
+
+//    @PutMapping(path = "{id}")
+//    public ResponseEntity<Response> update (@PathVariable("id") int id, @RequestBody RegisterDTO userInfo){
+//
+//        UserEntity user = new UserEntity();
+//        user.setFName(userInfo.getFName());
+//        user.setMName(userInfo.getMName());
+//        user.setLName(userInfo.getLName());
+//        user.setEmail(userInfo.getEmail());
+//        user.setPassword(userInfo.getPassword());
+//
+//        UserEntity updatedUser = service.updateUserDetails(id, updateDto.getEmail(), updateDto.getFName(), updateDto.getMName(), updateDto.getLName());
+//        return ResponseEntity.ok(updatedUser);
+//    }
+
+//}
+
+    @GetMapping(path = "/image/{fileName}", produces = IMAGE_PNG_VALUE)
+    public byte[] getServerImage(@PathVariable("fileName") String fileName) throws IOException {
+        return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "Downloads/images/" + fileName));
     }
 }

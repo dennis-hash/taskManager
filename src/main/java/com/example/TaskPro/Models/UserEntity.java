@@ -21,6 +21,7 @@ public class UserEntity {
     private String mName;
     private String lName;
     private String email;
+    private String imageUrl;
     @JsonIgnore
     private String password;
 

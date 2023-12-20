@@ -19,5 +19,11 @@ public class UserService {
         return repository.save(userInfo);
     }
 
+//    public UserEntity updateUserDetails (UserEntity userInfo){
+//        //UserEntity user = repository.findById(userInfo.getId());
+//
+//
+//    }
+
 
 }
