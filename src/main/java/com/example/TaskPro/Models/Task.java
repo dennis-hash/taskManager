@@ -24,16 +24,22 @@ public class Task {
     //time task details are updated
     private LocalDateTime updatedAt;
     private String dueDate;
-    //userId - ID of the person doing the task
-    private int id;
-    private String assignedToName;
+//    //userId - ID of the person doing the task
+//    private int id;
+//    private String assignedToName;
     private int createdBy;
 //    private String stageId;
     private String priority;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_user_id", referencedColumnName = "taskId")
+    private List<AssignedPersons> assignedPersons;
+
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_task_id", referencedColumnName = "taskId")
     private List<TasksHistory> tasksHistory;
+
+    private String stage;
 
 
 }

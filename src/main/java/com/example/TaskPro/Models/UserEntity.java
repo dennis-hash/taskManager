@@ -26,9 +26,9 @@ public class UserEntity {
     @JsonIgnore
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
-    private List<Task> tasks;
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
+//    private List<Task> tasks;
 
 
 
@@ -38,5 +38,9 @@ public class UserEntity {
     )
     @JsonIgnore
     private List<Roles> roles = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
+    List<AssignedTasks> assignedTasks;
 
 }
