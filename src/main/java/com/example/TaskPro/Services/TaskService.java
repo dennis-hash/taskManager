@@ -135,14 +135,25 @@ public class TaskService {
         for(int i = 0; i < assignedTasks.size(); i++) {
             if(assignedTasks.get(i).getTaskId() == assignee.getTaskId()) {
                 assignedTasks.remove(assignedTasks.get(i));
-                task.getAssignedPersons().removeIf(persons -> "taskId".equals(task.getTaskId()));
+
                 user.setAssignedTasks(assignedTasks);
-                taskRepository.save(task);
+
                 userRepository.save(user);
                 break;
             }
 
         }
+
+        List<AssignedPersons> assignedPersons = task.getAssignedPersons();
+        for(int i = 0; i < assignedPersons.size(); i++) {
+            if(assignedPersons.get(i).getTaskId() == assignee.getTaskId()) {
+                assignedPersons.remove(assignedPersons.get(i));
+                task.setAssignedPersons(assignedPersons);
+                taskRepository.save(task);
+            }
+        }
+
+
 
 //        AssignedPersons assignedPerson = assignedPersonRepository.getById(assignee.getAssignedPersonPk());
         assignedPersonRepository.deleteById(assignee.getAssignedPersonPk());
