@@ -146,7 +146,7 @@ public class TaskService {
 
         List<AssignedPersons> assignedPersons = task.getAssignedPersons();
         for(int i = 0; i < assignedPersons.size(); i++) {
-            if(assignedPersons.get(i).getTaskId() == assignee.getTaskId()) {
+            if(assignedPersons.get(i).getId() == assignee.getId()) {
                 assignedPersons.remove(assignedPersons.get(i));
                 task.setAssignedPersons(assignedPersons);
                 taskRepository.save(task);
