@@ -16,7 +16,7 @@ public class AssignedTasks {
     private int pk;
     private int taskId;
     //ID of assignee
-    @Column(unique = true)
+
     private int id;
 
     public AssignedTasks(int taskId, int id) {
