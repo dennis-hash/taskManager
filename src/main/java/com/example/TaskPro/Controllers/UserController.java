@@ -65,6 +65,10 @@ public class UserController {
         user.setMName(userInfo.getMName());
         user.setLName(userInfo.getLName());
         user.setEmail(userInfo.getEmail());
+
+
+        user.setPassword(userInfo.getPassword());
+
         user.setPassword(userInfo.getPassword());
 
         Roles roles = roleRepository.findByName("USER").get();
@@ -132,24 +136,17 @@ public class UserController {
 
     }
 
-//    @PutMapping(path = "{id}")
-//    public ResponseEntity<Response> update (@PathVariable("id") int id, @RequestBody RegisterDTO userInfo){
-//
-//        UserEntity user = new UserEntity();
-//        user.setFName(userInfo.getFName());
-//        user.setMName(userInfo.getMName());
-//        user.setLName(userInfo.getLName());
-//        user.setEmail(userInfo.getEmail());
-//        user.setPassword(userInfo.getPassword());
-//
-//        UserEntity updatedUser = service.updateUserDetails(id, updateDto.getEmail(), updateDto.getFName(), updateDto.getMName(), updateDto.getLName());
-//        return ResponseEntity.ok(updatedUser);
-//    }
 
-//}
 
     @GetMapping(path = "/image/{fileName}", produces = IMAGE_PNG_VALUE)
     public byte[] getServerImage(@PathVariable("fileName") String fileName) throws IOException {
         return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "Downloads/images/" + fileName));
     }
+
+
+    @GetMapping("user/{userId}")
+    public UserEntity getUserById(@PathVariable int userId) {
+        return service.getUserById(userId);
+    }
+
 }
