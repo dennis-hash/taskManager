@@ -132,7 +132,7 @@ public class UserController {
 
     }
 
-//    @PutMapping(path = "{id}")
+    @PutMapping(path = "{id}")
 //    public ResponseEntity<Response> update (@PathVariable("id") int id, @RequestBody RegisterDTO userInfo){
 //
 //        UserEntity user = new UserEntity();
@@ -142,8 +142,8 @@ public class UserController {
 //        user.setEmail(userInfo.getEmail());
 //        user.setPassword(userInfo.getPassword());
 //
-//        UserEntity updatedUser = service.updateUserDetails(id, updateDto.getEmail(), updateDto.getFName(), updateDto.getMName(), updateDto.getLName());
-//        return ResponseEntity.ok(updatedUser);
+//       //e.updateUserDetails(id, updateDto.getEmail(), updateDto.getFName(), updateDto.getMName(), updateDto.getLName());
+//       // return ResponseEntity.ok(updatedUser);
 //    }
 
 //}
