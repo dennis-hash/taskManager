@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "users")
@@ -26,9 +25,11 @@ public class UserEntity {
     @JsonIgnore
     private String password;
 
+
 //    @OneToMany(cascade = CascadeType.ALL)
 //    @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
 //    private List<Task> tasks;
+
 
 
 
@@ -42,5 +43,6 @@ public class UserEntity {
     @OneToMany
     @JoinColumn(name = "fk_user_id", referencedColumnName = "id")
     List<AssignedTasks> assignedTasks;
+
 
 }

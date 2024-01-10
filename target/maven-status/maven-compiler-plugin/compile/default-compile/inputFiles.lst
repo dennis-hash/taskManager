@@ -1,0 +1,16 @@
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Controllers/UserController.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/RegisterDTO.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/UserInfoUserDetails.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Models/Roles.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/JwtService.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/UserInfoUserDetailsService.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/SecurityConfig.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/JwtAuthEntryPoint.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Repository/RoleRepository.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Services/UserService.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/TaskProApplication.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/LoginDTO.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Models/UserEntity.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/Response.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Filter/JwtAuthFilter.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Repository/UserRepository.java
