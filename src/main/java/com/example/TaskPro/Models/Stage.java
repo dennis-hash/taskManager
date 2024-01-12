@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "stage")
 public class Stage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private int id;
-    private String projectStage;
+    private Integer id;
+    private String name;
+    private Integer createdBy;
 }

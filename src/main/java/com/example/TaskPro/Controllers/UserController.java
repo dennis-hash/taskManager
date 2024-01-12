@@ -50,14 +50,15 @@ public class UserController {
     public ResponseEntity<Response> addNewUser(@RequestBody RegisterDTO userInfo){
         if (userRepository.existsByEmail(userInfo.getEmail())) {
 
-            return ResponseEntity.ok(
-                    Response.builder()
+
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Response.builder()
                             .timeStamp(LocalDateTime.now())
                             .message("Email is taken!")
                             .status(HttpStatus.CONFLICT)
                             .statusCode(HttpStatus.CONFLICT.value())
                             .build()
-            );
+                    );
         }
 
         UserEntity user = new UserEntity();
