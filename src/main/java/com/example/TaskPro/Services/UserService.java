@@ -21,7 +21,7 @@ public class UserService {
 
 
     public UserEntity getUserById(int id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id);
     }
 
 
