@@ -1,6 +1,8 @@
 package com.example.TaskPro.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +33,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "stage_id")
+    @JsonBackReference
     private Stage stageId;
 
     private LocalDateTime createdAt;
@@ -45,6 +48,7 @@ public class Task {
 
 
     @OneToMany(mappedBy = "task")
+    @JsonManagedReference
     @JsonIgnore
     private List<TasksHistory> tasksHistory;
 
