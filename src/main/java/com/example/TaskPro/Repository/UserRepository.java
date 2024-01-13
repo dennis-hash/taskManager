@@ -4,7 +4,9 @@ import com.example.TaskPro.Models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +18,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     Boolean existsByEmail(String email);
     //UserEntity findById(int id);
     Boolean existsById(int id);
+
+    List<UserEntity> findAll();
 
     @Query(value = "SELECT COUNT(DISTINCT user_id) FROM user_tasks", nativeQuery = true)
     long getTotalUsersAssignedToTasks();

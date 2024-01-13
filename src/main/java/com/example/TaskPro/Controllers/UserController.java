@@ -28,6 +28,7 @@ import java.util.Map;
 import static java.util.Map.of;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -149,5 +150,13 @@ public class UserController {
     public UserEntity getUserById(@PathVariable int userId) {
         return service.getUserById(userId);
     }
+
+    @GetMapping("users")
+    public UserDTO getAllUsers () {
+        return service.getAllUsers();
+
+    }
+
+
 
 }

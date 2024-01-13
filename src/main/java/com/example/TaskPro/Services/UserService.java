@@ -1,10 +1,13 @@
 package com.example.TaskPro.Services;
 
+import com.example.TaskPro.DTO.UserDTO;
 import com.example.TaskPro.Models.UserEntity;
 import com.example.TaskPro.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -24,7 +27,9 @@ public class UserService {
         return repository.findById(id);
     }
 
-
+    public List<UserEntity> getAllUsers(){
+        return repository.findAll();
+    }
 
 
 

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 
 import static java.util.Map.of;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api")
 public class StageController {
