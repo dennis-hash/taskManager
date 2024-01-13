@@ -122,7 +122,9 @@ public class TaskService {
     public Task updateTaskStage(UpdateStageDTO updateStageDTO) {
         Task task = taskRepository.findById(updateStageDTO.getTaskId());
 
-        Stage stage = stageRepository.findById(updateStageDTO.getStageId());
+
+        Optional<Stage> sstage = stageRepository.findById(updateStageDTO.getStageId());
+        Stage stage = sstage.get();
 
         // Chec if the stage exists or create a new one
         if (stage == null) {

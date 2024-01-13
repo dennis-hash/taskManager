@@ -1,9 +1,6 @@
 package com.example.TaskPro.Controllers;
 
-import com.example.TaskPro.DTO.AssignTaskDTO;
-import com.example.TaskPro.DTO.CreateTaskDTO;
-import com.example.TaskPro.DTO.Response;
-import com.example.TaskPro.DTO.UpdateStageDTO;
+import com.example.TaskPro.DTO.*;
 import com.example.TaskPro.Exceptions.NotFoundException;
 import com.example.TaskPro.Models.Task;
 import com.example.TaskPro.Repository.StageRepository;
@@ -11,6 +8,7 @@ import com.example.TaskPro.Repository.TaskRepository;
 import com.example.TaskPro.Repository.UserRepository;
 import com.example.TaskPro.Services.StageService;
 import com.example.TaskPro.Services.TaskService;
+import com.example.TaskPro.Services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.util.Map.of;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api")
 public class TaskController {
@@ -28,6 +28,9 @@ public class TaskController {
     private TaskService taskService;
     @Autowired
     private TaskRepository taskRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -188,6 +191,12 @@ public class TaskController {
                         .statusCode(HttpStatus.OK.value())
                         .build()
                 );
+    }
+
+    @GetMapping("users")
+    public ResponseEntity<List<UserDTO>> getAllUsers () {
+        List<UserDTO> userDTOs = userService.getAllUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
 }

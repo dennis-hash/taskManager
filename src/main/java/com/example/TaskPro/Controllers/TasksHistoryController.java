@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api")
 public class TasksHistoryController {

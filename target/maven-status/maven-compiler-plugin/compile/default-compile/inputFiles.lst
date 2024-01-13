@@ -1,5 +1,6 @@
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Controllers/UserController.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/UserInfoUserDetails.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/UpdateStageName.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Exceptions/ExceptionHandler.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Exceptions/NotFoundException.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Models/Roles.java
@@ -30,11 +31,13 @@
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/PriorityOfTaskAddedToday.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Models/TasksHistory.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/UserInfoUserDetailsService.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/UserDTO.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Exceptions/ErrorObject.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Repository/RoleRepository.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Services/UserService.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Controllers/ReportController.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/AssignTaskDTO.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/StageWithTask.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Filter/JwtAuthFilter.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Models/Task.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Repository/UserRepository.java

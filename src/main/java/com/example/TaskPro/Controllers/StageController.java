@@ -2,6 +2,8 @@ package com.example.TaskPro.Controllers;
 
 
 import com.example.TaskPro.DTO.Response;
+import com.example.TaskPro.DTO.StageWithTask;
+import com.example.TaskPro.DTO.UpdateStageName;
 import com.example.TaskPro.Models.Stage;
 import com.example.TaskPro.Models.Task;
 import com.example.TaskPro.Services.StageService;
@@ -14,9 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.util.Map.of;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api")
 public class StageController {
@@ -34,6 +38,33 @@ public class StageController {
                         .statusCode(HttpStatus.CREATED.value())
                         .build()
                 );
+    }
+
+    @GetMapping("allStagesAndTheirTasks")
+    public ResponseEntity<Response> getAll(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .data(of("stages",stageService.getAllStagesWithTasks()))
+                        .message("Stages and their tasks retreived successfully")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+                );
+    }
+
+    @PutMapping("updateStageName")
+    public ResponseEntity<Response> updateStageName (@RequestBody @Valid UpdateStageName up){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .data(of("stage",stageService.update(up)))
+                        .message("Updated successfully")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+                );
+
     }
 
 

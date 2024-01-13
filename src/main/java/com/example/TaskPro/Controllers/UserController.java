@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 
 import java.io.IOException;
@@ -23,11 +24,13 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.of;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -149,5 +152,13 @@ public class UserController {
     public UserEntity getUserById(@PathVariable int userId) {
         return service.getUserById(userId);
     }
+
+    @GetMapping("users")
+    public ResponseEntity<List<UserDTO>> getAllUsers () {
+        List<UserDTO> userDTOs = service.getAllUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    }
+
+
 
 }

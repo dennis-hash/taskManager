@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Integer> {
      Task findById(int taskId);
-     List<Task> findByStageId(Stage stage);
+     List<Task> findByStageId(Optional<Stage> stage);
      boolean existsById(int taskId);
      List<Task> findByAssignedUserId(int userId);
+
      Task deleteById(int taskId);
      // Total number of all tasks
      @Query(value = "SELECT COUNT(*) FROM tasks", nativeQuery = true)
