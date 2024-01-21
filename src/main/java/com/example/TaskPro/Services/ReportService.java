@@ -19,17 +19,18 @@ public class ReportService {
     @Autowired
     private UserRepository userRepository;
 
-    public TaskReportDTO generateTaskReport() {
-        long totalTasks = taskRepository.getTotalTasks();
-        long tasksAddedLastSevenDays = taskRepository.getTasksAddedLastSevenDays();
-        long totalTasksNotDone = taskRepository.getTotalTasksNotDone();
-        long tasksNotDoneUpdatedToDoneLastSevenDays = taskRepository.getTasksNotDoneUpdatedToDoneLastSevenDays();
-        long totalTasksWithDoneStage = taskRepository.getTotalTasksWithDoneStage();
-        long tasksUpdatedToDoneLastSevenDays = taskRepository.getTasksUpdatedToDoneLastSevenDays();
-        long totalUsersAssignedToTasks = userRepository.getTotalUsersAssignedToTasks();
-        long usersAssignedToTasksLastSevenDays = userRepository.getUsersAssignedToTasksLastSevenDays();
-        List<Task> tasksAddedLastSevenDaysDetails = taskRepository.findTasksAddedLastSevenDays();
-        List<Object[]> priorityOfTasksAddedToday = taskRepository.getPriorityOfTasksAddedToday();
+    public TaskReportDTO generateTaskReport(int projectId) {
+
+        long totalTasks = taskRepository.getTotalTasks(projectId);
+        long tasksAddedLastSevenDays = taskRepository.getTasksAddedLastSevenDays(projectId);
+        long totalTasksNotDone = taskRepository.getTotalTasksNotDone(projectId);
+        long tasksNotDoneUpdatedToDoneLastSevenDays = taskRepository.getTasksNotDoneUpdatedToDoneLastSevenDays(projectId);
+        long totalTasksWithDoneStage = taskRepository.getTotalTasksWithDoneStage(projectId);
+        long tasksUpdatedToDoneLastSevenDays = taskRepository.getTasksUpdatedToDoneLastSevenDays(projectId);
+        long totalUsersAssignedToTasks = userRepository.getTotalUsersAssignedToTasks(projectId);
+        long usersAssignedToTasksLastSevenDays = userRepository.getUsersAssignedToTasksLastSevenDays(projectId);
+        List<Task> tasksAddedLastSevenDaysDetails = taskRepository.findTasksAddedLastSevenDays(projectId);
+        List<Object[]> priorityOfTasksAddedToday = taskRepository.getPriorityOfTasksAddedToday(projectId);
 
         return new TaskReportDTO(
                 totalTasks,

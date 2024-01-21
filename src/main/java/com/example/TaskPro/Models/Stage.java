@@ -22,7 +22,12 @@ public class Stage {
     private String name;
     private Integer createdBy;
 
-    @OneToMany(mappedBy = "stageId", fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    @JsonIgnore
+    private Project projectId;
+
+    @OneToMany(mappedBy = "stageId")
     //@JsonIgnore
     @JsonManagedReference
     private List<Task> tasks = new ArrayList<>();
