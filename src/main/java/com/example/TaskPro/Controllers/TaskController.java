@@ -2,7 +2,10 @@ package com.example.TaskPro.Controllers;
 
 import com.example.TaskPro.DTO.*;
 import com.example.TaskPro.Exceptions.NotFoundException;
+import com.example.TaskPro.Models.Project;
+import com.example.TaskPro.Models.Stage;
 import com.example.TaskPro.Models.Task;
+import com.example.TaskPro.Repository.ProjectRepository;
 import com.example.TaskPro.Repository.StageRepository;
 import com.example.TaskPro.Repository.TaskRepository;
 import com.example.TaskPro.Repository.UserRepository;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Map.of;
 
@@ -37,17 +41,30 @@ public class TaskController {
 
     @Autowired
     private StageRepository stageRepository;
+
+    @Autowired
+    ProjectRepository projectRepository;
+
     //create new task
-    @PostMapping("/createTask/userId={userId}")
-    public ResponseEntity<Response> createNewTask(@RequestBody @Valid CreateTaskDTO task, @PathVariable("userId") int userId){
-        if(!stageRepository.existsById(task.getStageId())){
-            throw new NotFoundException("Stage does not exist");
+    @PostMapping("/createTask/userId={userId}/projectId={projectId}")
+    public ResponseEntity<Response> createNewTask(@RequestBody @Valid CreateTaskDTO task, @PathVariable("userId") int userId,@PathVariable("projectId") int projectId){
+        Optional<Project> pproject = projectRepository.findById(projectId);
+        Project project = pproject.get();
+        Stage stage = stageRepository.findByIdAndProjectId(task.getStageId(), project);
+        if (stage == null) {
+            throw new NotFoundException("Stage does not exist in this project");
+        }
+//        if(!stageRepository.existsById(task.getStageId())){
+//            throw new NotFoundException("Stage does not exist");
+//        }
+        if(!projectRepository.existsById(projectId)){
+            throw new NotFoundException("project does not exist");
         }
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Response.builder()
                         .timeStamp(LocalDateTime.now())
-                        .data(of("task",taskService.createTask(task,userId)))
+                        .data(of("task",taskService.createTask(task,userId,projectId)))
                         .message("Task created successfully")
                         .status(HttpStatus.CREATED)
                         .statusCode(HttpStatus.CREATED.value())
@@ -157,8 +174,8 @@ public class TaskController {
     }
 
     //get user's tasks
-    @GetMapping("/getUserTasks/userId={userId}")
-    public ResponseEntity<Response> getAllTasks(@PathVariable("userId") int userId){
+    @GetMapping("/getUserTasks/userId={userId}/projectId={projectId}")
+    public ResponseEntity<Response> getAllTasks(@PathVariable("userId") int userId, @PathVariable("projectId") int projectId){
 
         if ( !userRepository.existsById(userId)) {
             throw new NotFoundException("User does not exist");
@@ -168,7 +185,7 @@ public class TaskController {
                 .body(Response.builder()
                         .timeStamp(LocalDateTime.now())
                         .message("Task retreived successfully")
-                        .data(of("tasks", taskService.userTasks(userId)))
+                        .data(of("tasks", taskService.userTasks(userId,projectId)))
                         .status(HttpStatus.OK)
                         .statusCode(HttpStatus.OK.value())
                         .build()

@@ -26,21 +26,26 @@ public class Task {
     private String title;
     private String description;
     private String dueDate;
-
-
     private Integer createdBy;
     private String priority;
+
 
     @ManyToOne
     @JoinColumn(name = "stage_id")
     @JsonBackReference
     private Stage stageId;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    @JsonBackReference
+    @JsonIgnore
+    private Project projectId;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_tasks", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
     )
@@ -51,6 +56,12 @@ public class Task {
     @JsonManagedReference
     @JsonIgnore
     private List<TasksHistory> tasksHistory;
+
+
+
+
+
+
 
 
 

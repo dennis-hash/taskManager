@@ -3,8 +3,10 @@ package com.example.TaskPro.Services;
 import com.example.TaskPro.DTO.StageWithTask;
 import com.example.TaskPro.DTO.UpdateStageName;
 import com.example.TaskPro.Exceptions.NotFoundException;
+import com.example.TaskPro.Models.Project;
 import com.example.TaskPro.Models.Stage;
 import com.example.TaskPro.Models.Task;
+import com.example.TaskPro.Repository.ProjectRepository;
 import com.example.TaskPro.Repository.StageRepository;
 import com.example.TaskPro.Repository.TaskRepository;
 import jakarta.annotation.PostConstruct;
@@ -18,8 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class StageService {
-    @Autowired
-    private StageRepository taskStageRepository;
+
 
     @Autowired
     private StageRepository stageRepository;
@@ -28,18 +29,28 @@ public class StageService {
     @Autowired
     TaskRepository taskRepository;
 
-    public Stage createStage(Stage stage) {
-        return taskStageRepository.save(stage);
+    @Autowired
+    ProjectRepository projectRepository;
+
+    public Stage createStage(Stage stage, int projectId) {
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Project project = optionalProject.get();
+
+        Stage newStage = new Stage();
+        newStage.setProjectId(project);
+        newStage.setCreatedBy(stage.getCreatedBy());
+        newStage.setName(stage.getName());
+        return stageRepository.save(newStage);
     }
 
     @Transactional
     public void initializeDefaultStage() {
-        Stage defaultStage = taskStageRepository.findByName("DEFAULT");
+        Stage defaultStage = stageRepository.findByName("DEFAULT");
 
         if (defaultStage == null) {
             defaultStage = new Stage();
             defaultStage.setName("DEFAULT");
-            taskStageRepository.save(defaultStage);
+            stageRepository.save(defaultStage);
         }
     }
 
@@ -49,11 +60,11 @@ public class StageService {
         List<Task> tasksWithStage = taskRepository.findByStageId(stage);
 
         if (!tasksWithStage.isEmpty()) {
-            Stage defaultStage = taskStageRepository.findByName("DEFAULT");
+            Stage defaultStage = stageRepository.findByName("DEFAULT");
             tasksWithStage.forEach(task -> task.setStageId(defaultStage));
         }
 
-        taskStageRepository.deleteById(stageId);
+        stageRepository.deleteById(stageId);
     }
 
     public Stage update(UpdateStageName up){
@@ -70,8 +81,8 @@ public class StageService {
         return stageRepository.save(stage);
     }
 
-    public List<Stage> getAllStagesWithTasks() {
-        return stageRepository.findAllWithTasks();
+    public List<Stage> getAllStagesWithTasks(int projectId) {
+        return stageRepository.findAllWithTasks(projectId);
     }
 
 
