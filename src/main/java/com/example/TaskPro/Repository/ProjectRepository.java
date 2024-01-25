@@ -1,8 +1,6 @@
 package com.example.TaskPro.Repository;
 
 import com.example.TaskPro.Models.Project;
-import com.example.TaskPro.Models.Task;
-import com.example.TaskPro.Models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
