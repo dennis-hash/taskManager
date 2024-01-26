@@ -67,9 +67,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedOrigin("https://taskpro-2mq8.onrender.com");
-        configuration.addAllowedMethod("*"); // Allow all methods
-        configuration.addAllowedHeader("*"); // Allow all headers
-        configuration.setAllowCredentials(true); // Allow cookies
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
