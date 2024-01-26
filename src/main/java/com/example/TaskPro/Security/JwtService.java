@@ -57,11 +57,12 @@ public class JwtService {
     }
 
     private String createToken(Map<String, Object> claims, String userName) {
+        long oneWeekInMillis = 7 * 24 * 60 * 60 * 1000;
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*59))
+                .setExpiration(new Date(System.currentTimeMillis() + oneWeekInMillis))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
