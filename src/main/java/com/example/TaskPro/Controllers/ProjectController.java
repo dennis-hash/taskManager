@@ -70,6 +70,7 @@ public class ProjectController {
                 );
     }
 
+    //add member
     @PostMapping("/addMember")
     public ResponseEntity<Response> addMember(@RequestBody AddMemberToProject add){
         if ( !projectRepository.existsById(add.getProjectId())) {
