@@ -75,9 +75,16 @@ public class ProjectController {
         if ( !projectRepository.existsById(add.getProjectId())) {
             throw new NotFoundException("Project does not exist");
         }
-        if ( !userRepository.existsById(add.getAssigneeUserId())) {
-            throw new NotFoundException("User does not exist");
+
+        int[] assigneeUserIds = add.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            if(!userRepository.existsById(assigneeUserId)){
+                throw new NotFoundException("User with ID"+assigneeUserId+" does not exist");
+            }
+
         }
+
 
         projectService.addMembers(add);
         return ResponseEntity.status(HttpStatus.OK)

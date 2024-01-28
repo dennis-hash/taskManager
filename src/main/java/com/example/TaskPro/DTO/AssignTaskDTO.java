@@ -10,5 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssignTaskDTO {
     private int taskId;
-    private int assigneeUserId;
+    private int[] assigneeUserId;
+
 }
+
+

@@ -46,17 +46,28 @@ public class ProjectService {
         newProject.setTitle(project.getTitle());
         newProject.setDescription(project.getDescription());
         newProject.setCreatedBy(userId);
-        return projectRepository.save(newProject);
+        projectRepository.save(newProject);
+
+        AddMemberToProject newAssignee = new AddMemberToProject();
+        newAssignee.setProjectId(newProject.getId());
+        int[] userIds = {userId};
+        newAssignee.setAssigneeUserId(userIds);
+        addMembers(newAssignee);
+
+        return newProject;
     }
 
     public void addMembers(AddMemberToProject newAssignee) {
         Optional<Project> pproject = projectRepository.findById(newAssignee.getProjectId());
         Project project = pproject.get();
 
-        UserEntity user = userRepository.findById(newAssignee.getAssigneeUserId());
-
-        project.getMembers().add(user);
-        projectRepository.save(project);
+        int[] assigneeUserIds = newAssignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            UserEntity user = userRepository.findById(assigneeUserId);
+            project.getMembers().add(user);
+            projectRepository.save(project);
+        }
     }
 
     public List<ProjectDTO> getAllProjects(int userId) {

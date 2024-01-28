@@ -43,8 +43,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return http
-                .csrf().disable()
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/login","/api/auth/register","/swagger-ui**","/swagger-ui/**","/v3/**").permitAll()
                 .requestMatchers(AUTH_WHITELIST).permitAll()
@@ -67,9 +68,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedOrigin("https://taskpro-2mq8.onrender.com");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
+        configuration.addAllowedMethod("*"); // Allow all methods
+        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.setAllowCredentials(true); // Allow cookies
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
