@@ -76,10 +76,18 @@ public class TaskController {
     @PostMapping("/assignTask")
     public ResponseEntity<Response> assignTask(@RequestBody AssignTaskDTO newAssignee) {
 
-        if (!taskRepository.existsById(newAssignee.getTaskId()) || !userRepository.existsById(newAssignee.getAssigneeUserId())) {
-            throw new NotFoundException("Task or User does not exist");
+        if (!taskRepository.existsById(newAssignee.getTaskId())) {
+            throw new NotFoundException("Task does not exist");
         }
 
+        int[] assigneeUserIds = newAssignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            if(!userRepository.existsById(assigneeUserId)){
+                throw new NotFoundException("User with ID " + assigneeUserId + " does not exist");
+            }
+
+        }
         taskService.assignTask(newAssignee);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Response.builder()
@@ -95,8 +103,17 @@ public class TaskController {
     @DeleteMapping("/undoAssignment")
     public ResponseEntity<Response> undoAssignment(@RequestBody AssignTaskDTO assignee) {
 
-        if (!taskRepository.existsById(assignee.getTaskId()) || !userRepository.existsById(assignee.getAssigneeUserId())) {
-            throw new NotFoundException("Task or User does not exist");
+        if (!taskRepository.existsById(assignee.getTaskId())) {
+            throw new NotFoundException("Task does not exist");
+        }
+
+        int[] assigneeUserIds = assignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            if(!userRepository.existsById(assigneeUserId)){
+                throw new NotFoundException("User with ID " +assigneeUserId+ " does not exist");
+            }
+
         }
         taskService.undoTaskAssignment(assignee);
         return ResponseEntity.status(HttpStatus.OK)

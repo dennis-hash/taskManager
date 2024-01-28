@@ -62,29 +62,39 @@ public class TaskService {
         newTask.setUpdatedAt(localDateTime);
         newTask.setCreatedBy(userId);
 
+        taskRepository.save(newTask);
 
-        return taskRepository.save(newTask);
+        AssignTaskDTO assignTaskDTO = new AssignTaskDTO();
+        assignTaskDTO.setTaskId(newTask.getId());
+        int[] userIds = {userId};
+        assignTaskDTO.setAssigneeUserId(userIds);
+        assignTask(assignTaskDTO);
+
+        return newTask;
+
     }
 
     //assign task
     public void assignTask(AssignTaskDTO newAssignee) {
         Task task = taskRepository.findById(newAssignee.getTaskId());
-
-        if(task == null){
-            throw new NotFoundException("Task not found");
+        if (task == null) {
+            throw new NotFoundException("Task  not found");
         }
 
-        Project project = task.getProjectId();
-        List<UserEntity> projectMembers = project.getMembers();
+        int[] assigneeUserIds = newAssignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            Project project = task.getProjectId();
+            List<UserEntity> projectMembers = project.getMembers();
 
-        UserEntity user = userRepository.findById(newAssignee.getAssigneeUserId());
+            UserEntity user = userRepository.findById(assigneeUserId);
+            if (projectMembers.contains(user)) {
+                task.getAssignedUser().add(user);
+                taskRepository.save(task);
+            } else {
+                throw new NotFoundException("User with ID " + assigneeUserId + " is not a member of the project");
+            }
 
-        if (projectMembers.contains(user)) {
-            task.getAssignedUser().add(user);
-            taskRepository.save(task);
-        } else {
-            throw new NotFoundException("User is not a member of this project!");
-            //throw new IllegalStateException("User is not a member of the project");
         }
 
     }
@@ -92,10 +102,16 @@ public class TaskService {
     //assign task
     public void undoTaskAssignment(AssignTaskDTO newAssignee) {
         Task task = taskRepository.findById(newAssignee.getTaskId());
-        UserEntity user = userRepository.findById(newAssignee.getAssigneeUserId());
+        //UserEntity user = userRepository.findById(newAssignee.getAssigneeUserId());
 
-        task.getAssignedUser().remove(user);
-        taskRepository.save(task);
+        int[] assigneeUserIds = newAssignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            UserEntity user = userRepository.findById(assigneeUserIds[j]);
+            task.getAssignedUser().remove(user);
+            taskRepository.save(task);
+        }
+
+
     }
 
     //update task
