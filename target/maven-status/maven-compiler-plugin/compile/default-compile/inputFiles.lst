@@ -1,4 +1,5 @@
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Controllers/UserController.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/SecurityConfiguration.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/UserInfoUserDetails.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/UpdateStageName.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/SecurityConfig.java

@@ -70,6 +70,37 @@ public class ProjectService {
         }
     }
 
+    public void deleteMembers(AddMemberToProject obj) {
+        Optional<Project> pproject = projectRepository.findById(obj.getProjectId());
+        Project project = pproject.get();
+
+        List<UserEntity> projectMembers = project.getMembers();
+
+        int[] members = obj.getAssigneeUserId();
+        for (int j = 0; j < members .length; j++) {
+            int assigneeUserId = members [j];
+            UserEntity user = userRepository.findById(assigneeUserId);
+
+            if (projectMembers.contains(user)) {
+                project.getMembers().remove(user);
+                projectRepository.save(project);
+            } else {
+                throw new NotFoundException("User with ID " + assigneeUserId + " is not a member of the project");
+            }
+        }
+    }
+
+    public Project updateProject(Project project, int projectId){
+        Optional<Project> pproject = projectRepository.findById(projectId);
+        Project ppproject = pproject.get();
+
+        ppproject.setTitle(project.getTitle());
+        ppproject.setDescription(project.getDescription());
+
+        return projectRepository.save(ppproject);
+
+    }
+
     public List<ProjectDTO> getAllProjects(int userId) {
         List<Project> createdProjects = projectRepository.findByCreatedBy(userId);
 
@@ -111,38 +142,20 @@ public class ProjectService {
     }
 
     public List<UserDTO> getAllMembers(int projectId) {
+
         List<Object[]> results = projectRepository.findAllMembersByProjectIdNative(projectId);
-        List<UserEntity> members = new ArrayList<>();
-
-        for (Object[] result : results) {
-            UserEntity user = new UserEntity();
-            user.setId((Integer) result[0]);
-            user.setFName((String) result[1]);
-            user.setMName((String) result[2]);
-            user.setLName((String) result[3]);
-            user.setEmail((String) result[4]);
-            members.add(user);
-        }
-
-        return mapUsersToDTOs(members);
-    }
-
-    private List<UserDTO> mapUsersToDTOs(List<UserEntity> users) {
-        List<UserDTO> userDTOs = new ArrayList<>();
-
-        for (UserEntity user : users) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setFName(user.getFName());
-            userDTO.setMName(user.getMName());
-            userDTO.setLName(user.getLName());
-            userDTO.setEmail(user.getEmail());
 
 
-            userDTOs.add(userDTO);
-        }
+        return results.stream()
+                .map(row -> new UserDTO(
+                        (Integer) row[0],
+                        (String) row[2],
+                        (String) row[5],
+                        (String) row[4],
+                        (String) row[1]
+                ))
+                .collect(Collectors.toList());
 
-        return userDTOs;
     }
 
 }
