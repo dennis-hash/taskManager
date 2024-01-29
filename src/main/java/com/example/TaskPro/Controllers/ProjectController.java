@@ -127,5 +127,50 @@ public class ProjectController {
         return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
+    @PutMapping("/updateProject/projectId={projectId}")
+    public ResponseEntity<Response> updateProjectDetails(@RequestBody Project project, @PathVariable("projectId") int projectId){
+        if ( !projectRepository.existsById(projectId)) {
+            throw new NotFoundException("Project does not exist");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .data(of("updatedProject",projectService.updateProject(project,projectId)))
+                        .message("Project updated successfully")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+                );
+
+    }
+
+    @PostMapping("/deleteMember")
+    public ResponseEntity<Response> deleteMember(@RequestBody AddMemberToProject obj){
+        if ( !projectRepository.existsById(obj.getProjectId())) {
+            throw new NotFoundException("Project does not exist");
+        }
+
+        int[] assigneeUserIds = obj.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            if(!userRepository.existsById(assigneeUserId)){
+                throw new NotFoundException("User with ID"+assigneeUserId+" does not exist");
+            }
+
+        }
+
+
+        projectService.deleteMembers(obj);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Response.builder()
+                        .timeStamp(LocalDateTime.now())
+                        .message("Deleted successfully")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+                );
+    }
+
 
 }

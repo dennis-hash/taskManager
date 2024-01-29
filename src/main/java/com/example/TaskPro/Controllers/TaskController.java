@@ -100,7 +100,7 @@ public class TaskController {
     }
 
         //undo task assignment
-    @DeleteMapping("/undoAssignment")
+    @PostMapping("/undoAssignment")
     public ResponseEntity<Response> undoAssignment(@RequestBody AssignTaskDTO assignee) {
 
         if (!taskRepository.existsById(assignee.getTaskId())) {
