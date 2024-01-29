@@ -145,7 +145,7 @@ public class ProjectController {
 
     }
 
-    @DeleteMapping("/deleteMember")
+    @PostMapping("/deleteMember")
     public ResponseEntity<Response> deleteMember(@RequestBody AddMemberToProject obj){
         if ( !projectRepository.existsById(obj.getProjectId())) {
             throw new NotFoundException("Project does not exist");
