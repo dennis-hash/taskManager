@@ -20,6 +20,7 @@
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Services/UserService.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Controllers/ReportController.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Controllers/ProjectController.java
+/home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Security/SwaggerConfig.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/AssignTaskDTO.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/DTO/AddMemberToProject.java
 /home/dennis/Documents/springBoot/TaskPro/src/main/java/com/example/TaskPro/Filter/JwtAuthFilter.java

@@ -9,13 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition(info = @Info(title = "Task Pro APIs", version = "1.0"))
-@SecurityScheme(
-		name = "Bearer authentication",
-		type = SecuritySchemeType.HTTP,
-		scheme = "bearer",
-		bearerFormat = "JWT",
-		description = "Enter your JWT access token here to access protected resources."
-)
 public class TaskProApplication {
 
 	public static void main(String[] args) {
