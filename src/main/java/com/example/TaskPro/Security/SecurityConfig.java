@@ -44,40 +44,42 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/login","/api/auth/register","/swagger-ui**","/swagger-ui/**","/v3/**").permitAll()
-                .requestMatchers(AUTH_WHITELIST).permitAll()
-                .and()
-                .authorizeHttpRequests().requestMatchers("/api/**")
-                .authenticated().and()
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-
 //        return http
 //                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests()
+//                .requestMatchers("/api/auth/login","/api/auth/register","/swagger-ui**","/swagger-ui/**","/v3/**").permitAll()
+//                .requestMatchers(AUTH_WHITELIST).permitAll()
+//                .and()
+//                .authorizeHttpRequests().requestMatchers("/api/**")
+//                .authenticated().and()
 //                .exceptionHandling()
 //                .authenticationEntryPoint(jwtAuthEntryPoint)
 //                .and()
 //                .sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //                .and()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/api/auth/login","/api/auth/register","/swagger-ui**","/swagger-ui/**","/v3/**").permitAll()
-//                .requestMatchers(AUTH_WHITELIST).permitAll()
-//                .anyRequest().authenticated()
-//                .and()
 //                .authenticationProvider(authenticationProvider())
-//                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter .class)
+//                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
 //                .build();
+
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .cors()
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/auth/login","/api/auth/register","/swagger-ui**","/swagger-ui/**","/v3/**").permitAll()
+                .requestMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter .class)
+                .build();
     }
 
     @Bean
