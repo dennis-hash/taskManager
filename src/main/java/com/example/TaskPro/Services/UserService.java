@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,26 +31,28 @@ public class UserService {
 
     public List<UserDTO> getAllUsers() {
         List<UserEntity> users = repository.findAll();
-        return mapUsersToDTOs(users);
+        return users.stream()
+                .map(user -> new UserDTO(user.getId(),user.getFName(), user.getMName(),user.getLName(),user.getEmail()))
+                .collect(Collectors.toList());
     }
 
-    private List<UserDTO> mapUsersToDTOs(List<UserEntity> users) {
-        List<UserDTO> userDTOs = new ArrayList<>();
-
-        for (UserEntity user : users) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(user.getId());
-            userDTO.setFName(user.getFName());
-            userDTO.setMName(user.getMName());
-            userDTO.setLName(user.getLName());
-            userDTO.setEmail(user.getEmail());
-
-
-            userDTOs.add(userDTO);
-        }
-
-        return userDTOs;
-    }
+//    private List<UserDTO> mapUsersToDTOs(List<UserEntity> users) {
+//        List<UserDTO> userDTOs = new ArrayList<>();
+//
+//        for (UserEntity user : users) {
+//            UserDTO userDTO = new UserDTO();
+//            userDTO.setId(user.getId());
+//            userDTO.setFName(user.getFName());
+//            userDTO.setMName(user.getMName());
+//            userDTO.setLName(user.getLName());
+//            userDTO.setEmail(user.getEmail());
+//
+//
+//            userDTOs.add(userDTO);
+//        }
+//
+//        return userDTOs;
+//    }
 
 
 }
