@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 
 import java.io.IOException;
@@ -23,11 +24,13 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.of;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
+@CrossOrigin(origins = {"http://localhost:4200", "https://taskpro-2mq8.onrender.com"})
 @RestController
 @RequestMapping("/api/auth")
 public class UserController {
@@ -50,14 +53,15 @@ public class UserController {
     public ResponseEntity<Response> addNewUser(@RequestBody RegisterDTO userInfo){
         if (userRepository.existsByEmail(userInfo.getEmail())) {
 
-            return ResponseEntity.ok(
-                    Response.builder()
+
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Response.builder()
                             .timeStamp(LocalDateTime.now())
                             .message("Email is taken!")
                             .status(HttpStatus.CONFLICT)
                             .statusCode(HttpStatus.CONFLICT.value())
                             .build()
-            );
+                    );
         }
 
         UserEntity user = new UserEntity();
@@ -66,7 +70,11 @@ public class UserController {
         user.setLName(userInfo.getLName());
         user.setEmail(userInfo.getEmail());
 
+
         user.setPassword(userInfo.getPassword());
+
+        user.setPassword(userInfo.getPassword());
+
         Roles roles = roleRepository.findByName("USER").get();
         user.setRoles(Collections.singletonList(roles));
 
@@ -132,29 +140,25 @@ public class UserController {
 
     }
 
-//    @PutMapping(path = "{id}")
-//    public ResponseEntity<Response> update (@PathVariable("id") int id, @RequestBody RegisterDTO userInfo){
-//
-//        UserEntity user = new UserEntity();
-//        user.setFName(userInfo.getFName());
-//        user.setMName(userInfo.getMName());
-//        user.setLName(userInfo.getLName());
-//        user.setEmail(userInfo.getEmail());
-//        user.setPassword(userInfo.getPassword());
-//
-//        UserEntity updatedUser = service.updateUserDetails(id, updateDto.getEmail(), updateDto.getFName(), updateDto.getMName(), updateDto.getLName());
-//        return ResponseEntity.ok(updatedUser);
-//    }
 
-//}
 
     @GetMapping(path = "/image/{fileName}", produces = IMAGE_PNG_VALUE)
     public byte[] getServerImage(@PathVariable("fileName") String fileName) throws IOException {
         return Files.readAllBytes(Paths.get(System.getProperty("user.home") + "Downloads/images/" + fileName));
     }
 
+
     @GetMapping("user/{userId}")
     public UserEntity getUserById(@PathVariable int userId) {
         return service.getUserById(userId);
     }
+
+    @GetMapping("users")
+    public ResponseEntity<List<UserDTO>> getAllUsers () {
+        List<UserDTO> userDTOs = service.getAllUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    }
+
+
+
 }

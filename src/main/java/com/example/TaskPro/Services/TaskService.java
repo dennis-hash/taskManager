@@ -1,175 +1,179 @@
 package com.example.TaskPro.Services;
 
+import com.example.TaskPro.DTO.AssignTaskDTO;
+import com.example.TaskPro.DTO.CreateTaskDTO;
+import com.example.TaskPro.DTO.UpdateStageDTO;
+import com.example.TaskPro.Exceptions.NotFoundException;
 import com.example.TaskPro.Models.*;
-import com.example.TaskPro.Repository.AssignedPersonRepository;
-import com.example.TaskPro.Repository.AssignedTasksRepository;
+import com.example.TaskPro.Repository.ProjectRepository;
+import com.example.TaskPro.Repository.StageRepository;
 import com.example.TaskPro.Repository.TaskRepository;
 import com.example.TaskPro.Repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
+@Slf4j
 public class TaskService {
     @Autowired
     TaskRepository taskRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    AssignedTasksRepository assignedTasksRepository;
+    StageRepository stageRepository;
 
     @Autowired
-    AssignedPersonRepository assignedPersonRepository;
+    ProjectRepository projectRepository;
 
-    //create a task
-    public Task createTask(Task task) {
+
+        //create a task
+    public Task createTask(CreateTaskDTO task, int userId, int projectId) {
+
+
+        Task newTask = new Task();
+        Optional<Stage> optionalStage = stageRepository.findById(task.getStageId());
+        Stage stage = optionalStage.get();
+
+        Optional<Project> optionalProject = projectRepository.findById(projectId);
+        Project project = optionalProject.get();
+
+        newTask.setCreatedBy(task.getCreatedBy());
+        newTask.setDescription(task.getDescription());
+        newTask.setPriority(task.getPriority());
+        newTask.setTitle(task.getTitle());
+        newTask.setDescription(task.getDescription());
+        newTask.setStageId(stage);
+        newTask.setProjectId(project);
+        newTask.setDueDate(task.getDueDate());
         LocalDateTime localDateTime = LocalDateTime.now();
-        task.setCreatedAt(localDateTime);
+        newTask.setCreatedAt(localDateTime);
+        newTask.setUpdatedAt(localDateTime);
+        newTask.setCreatedBy(userId);
+
+        taskRepository.save(newTask);
+
+        AssignTaskDTO assignTaskDTO = new AssignTaskDTO();
+        assignTaskDTO.setTaskId(newTask.getId());
+        int[] userIds = {userId};
+        assignTaskDTO.setAssigneeUserId(userIds);
+        assignTask(assignTaskDTO);
+
+        return newTask;
+
+    }
+
+    //assign task
+    public void assignTask(AssignTaskDTO newAssignee) {
+        Task task = taskRepository.findById(newAssignee.getTaskId());
+        if (task == null) {
+            throw new NotFoundException("Task  not found");
+        }
+
+        int[] assigneeUserIds = newAssignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            int assigneeUserId = assigneeUserIds[j];
+            Project project = task.getProjectId();
+            List<UserEntity> projectMembers = project.getMembers();
+
+            UserEntity user = userRepository.findById(assigneeUserId);
+            if (projectMembers.contains(user)) {
+                task.getAssignedUser().add(user);
+                taskRepository.save(task);
+            } else {
+                throw new NotFoundException("User with ID " + assigneeUserId + " is not a member of the project");
+            }
+
+        }
+
+    }
+
+    //assign task
+    public void undoTaskAssignment(AssignTaskDTO newAssignee) {
+        Task task = taskRepository.findById(newAssignee.getTaskId());
+        //UserEntity user = userRepository.findById(newAssignee.getAssigneeUserId());
+
+        int[] assigneeUserIds = newAssignee.getAssigneeUserId();
+        for (int j = 0; j < assigneeUserIds.length; j++) {
+            UserEntity user = userRepository.findById(assigneeUserIds[j]);
+            task.getAssignedUser().remove(user);
+            taskRepository.save(task);
+        }
 
 
-
-//        UserEntity user = userRepository.findById(task.getId()).orElse(null);
-//        if(user != null) {
-//            user.getTasks().add(task);
-//            userRepository.save(user);
-//        }
-        taskRepository.save(task);
-        return task;
     }
 
     //update task
-    public Task updateTask(Task task) {
-        Task taskToUpdate = taskRepository.findTaskByTaskId(task.getTaskId());
-        LocalDateTime currentDateAndTime = LocalDateTime.now();
+    public Task updateTask(CreateTaskDTO task, int taskId) {
+        Task taskToUpdate = taskRepository.findById(taskId);
+        Optional<Stage> sstage = stageRepository.findById(task.getStageId());
+        Stage stage = sstage.get();
 
 
         taskToUpdate.setTitle(task.getTitle());
         taskToUpdate.setDescription(task.getDescription());
-        taskToUpdate.setCreatedAt(task.getCreatedAt());
-        taskToUpdate.setUpdatedAt(currentDateAndTime);
+        taskToUpdate.setUpdatedAt(LocalDateTime.now());
         taskToUpdate.setDueDate(task.getDueDate());
-//        taskToUpdate.setId(task.getId());
-//        taskToUpdate.setAssignedToName(task.getAssignedToName());
         taskToUpdate.setCreatedBy(task.getCreatedBy());
-//        taskToUpdate.setStageId(task.getStageId());
         taskToUpdate.setPriority(task.getPriority());
-        taskToUpdate.setTasksHistory(task.getTasksHistory());
-//        taskToUpdate.setPriority(task.getPriority());
-        taskToUpdate.setStage(task.getStage());
-//        taskToUpdate.getAssignedPersons().add(task.getAssignedPersons())
+        taskToUpdate.setStageId(stage);
 
-//        UserEntity user = userRepository.findById(task);
-//        List<Task> tasks = user.getTasks();
-//        if(user != null) {
-//             for(int i = 0; i < tasks.size(); i++){
-//                 if(tasks.get(i).getTaskId() == task.getTaskId()){
-//
-//                     tasks.get(i).setTitle(task.getTitle());
-//                     tasks.get(i).setDescription(task.getDescription());
-//                     tasks.get(i).setCreatedAt(task.getCreatedAt());
-//                     tasks.get(i).setUpdatedAt(currentDateAndTime);
-//                     tasks.get(i).setDueDate(task.getDueDate());
-////                     tasks.get(i).setId(task.getId());
-////                     tasks.get(i).setAssignedToName(task.getAssignedToName());
-//                     tasks.get(i).setCreatedBy(task.getCreatedBy());
-////        taskToUpdate.setStageId(task.getStageId());
-//                     tasks.get(i).setPriority(task.getPriority());
-//                     tasks.get(i).setTasksHistory(task.getTasksHistory());
-//
-//                     user.setTasks(tasks);
-//                     userRepository.save(user);
-//                     break;
-//                 }
-//
-//             }
-//        }
 
-        Task updatedTask = taskToUpdate;
-        taskRepository.save(updatedTask);
-        return updatedTask;
+        return taskRepository.save(taskToUpdate);
+
     }
 
-    //assign task
-    public AssignedPersons assignTask(AssignedPersons newAssignee) {
-        System.out.println("ASSIGN TASK");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Task taskToAssign = taskRepository.findTaskByTaskId(newAssignee.getTaskId());
-        UserEntity assignedUser = userRepository.findById(newAssignee.getId()).orElse(null);
-        newAssignee.setAssignedAt(localDateTime);
-        taskToAssign.getAssignedPersons().add(newAssignee);
-        AssignedTasks task = new AssignedTasks(newAssignee.getTaskId(), newAssignee.getId());
-        assignedUser.getAssignedTasks().add(task);
-
-        assignedTasksRepository.save(task);
-        userRepository.save(assignedUser);
-//        userRepository.save(assignedUser);
-        taskRepository.save(taskToAssign);
-        assignedPersonRepository.save(newAssignee);
-        return newAssignee;
+    public Task getTaskByTaskId(int taskId) {
+        return taskRepository.findById(taskId);
     }
 
-//    //update task history
-//    public TasksHistory tasksHistory(Task task) {
-//        Task taskToUpdate = taskRepository.findTaskByTaskId(task.getTaskId());
-//        TasksHistory tasksHistoryToUpdate = taskToUpdate.getTasksHistory();
-//
-//    }
-
-    //delete task
+        //delete task
     public String deleteTask(int taskId) {
-
-        taskRepository.deleteByTaskId(taskId);
+        Task taskToDelete = taskRepository.findById(taskId);
+        taskToDelete.setStageId(null);
+        taskToDelete.setCreatedBy(null);
+        taskRepository.save(taskToDelete);
+        taskRepository.deleteById(taskId);
         return "Task deleted successfully";
     }
 
-    public String undoTaskAssignment(AssignedPersons assignee) {
-        Task task = taskRepository.findTaskByTaskId(assignee.getTaskId());
-        UserEntity user = userRepository.findById(assignee.getId()).orElse(null);
-        List<AssignedTasks> assignedTasks = user.getAssignedTasks();
-//        List<AssignedPersons> assignedPersons = task.getAssignedPersons();
-        for(int i = 0; i < assignedTasks.size(); i++) {
-            if(assignedTasks.get(i).getTaskId() == assignee.getTaskId()) {
-                assignedTasks.remove(assignedTasks.get(i));
+    public Collection<Task> userTasks(int userId, int projectId){
+        Optional<Project> pproject = projectRepository.findById(projectId);
+        Project project = pproject.get();
+        return taskRepository.findByAssignedUserIdAndProjectId(userId,project);
+    }
 
-                user.setAssignedTasks(assignedTasks);
 
-                userRepository.save(user);
-                break;
-            }
+    public Task updateTaskStage(UpdateStageDTO updateStageDTO) {
+        Task task = taskRepository.findById(updateStageDTO.getTaskId());
 
+
+        Optional<Stage> sstage = stageRepository.findById(updateStageDTO.getStageId());
+        Stage stage = sstage.get();
+
+        // Chec if the stage exists or create a new one
+        if (stage == null) {
+            stage = new Stage();
+            stage.setId(updateStageDTO.getStageId());
+            stage = stageRepository.save(stage);
         }
 
-        List<AssignedPersons> assignedPersons = task.getAssignedPersons();
-        for(int i = 0; i < assignedPersons.size(); i++) {
-            if(assignedPersons.get(i).getId() == assignee.getId()) {
-                assignedPersons.remove(assignedPersons.get(i));
-                task.setAssignedPersons(assignedPersons);
-                taskRepository.save(task);
-            }
-        }
+        task.setStageId(stage);
 
-
-
-//        AssignedPersons assignedPerson = assignedPersonRepository.getById(assignee.getAssignedPersonPk());
-        assignedPersonRepository.deleteById(assignee.getAssignedPersonPk());
-
-        return "Task assignment undone";
-    }
-
-    //find task(s)
-
-    public Task getTaskByTaskId(int taskId) {
-        return taskRepository.findTaskByTaskId(taskId);
-
+        return taskRepository.save(task);
     }
 
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
-    }
+
 }

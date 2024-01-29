@@ -16,10 +16,11 @@ public class TasksHistory {
     @Id
     @GeneratedValue
     private int tasksHistoryId;
-
-    private int taskId;
     private int previousStage;
     private String newStage;
     private LocalDateTime localDateTime;
     private int updatedBy;
+
+    @ManyToOne
+    private Task task;
 }

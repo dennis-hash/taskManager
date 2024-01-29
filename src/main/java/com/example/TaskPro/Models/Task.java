@@ -1,45 +1,72 @@
 package com.example.TaskPro.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tasks")
 public class Task {
     @Id
-    @GeneratedValue
-    private int taskId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
+    @NotEmpty(message = "Title cannot be empty")
     private String title;
     private String description;
-    private LocalDateTime createdAt;
-    //time task details are updated
-    private LocalDateTime updatedAt;
     private String dueDate;
-//    //userId - ID of the person doing the task
-//    private int id;
-//    private String assignedToName;
-    private int createdBy;
-//    private String stageId;
+    private Integer createdBy;
     private String priority;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_user_id", referencedColumnName = "taskId")
-    private List<AssignedPersons> assignedPersons;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_task_id", referencedColumnName = "taskId")
+    @ManyToOne
+    @JoinColumn(name = "stage_id")
+    @JsonBackReference
+    private Stage stageId;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    @JsonBackReference
+    @JsonIgnore
+    private Project projectId;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_tasks", joinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
+    private List<UserEntity> assignedUser = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "task")
+    @JsonManagedReference
+    @JsonIgnore
     private List<TasksHistory> tasksHistory;
 
-    private String stage;
+
+
+
+
+
+
+
 
 
 }
