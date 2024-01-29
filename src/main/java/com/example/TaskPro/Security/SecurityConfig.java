@@ -61,6 +61,23 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
+//        return http
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .exceptionHandling()
+//                .authenticationEntryPoint(jwtAuthEntryPoint)
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeHttpRequests()
+//                .requestMatchers("/api/auth/login","/api/auth/register","/swagger-ui**","/swagger-ui/**","/v3/**").permitAll()
+//                .requestMatchers(AUTH_WHITELIST).permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .authenticationProvider(authenticationProvider())
+//                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter .class)
+//                .build();
     }
 
     @Bean
@@ -68,8 +85,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:4200");
         configuration.addAllowedOrigin("https://taskpro-2mq8.onrender.com");
-        configuration.addAllowedMethod("*"); // Allow all methods
-        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true); // Allow cookies
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
